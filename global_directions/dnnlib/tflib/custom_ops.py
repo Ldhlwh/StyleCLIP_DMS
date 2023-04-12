@@ -59,7 +59,9 @@ def _get_cuda_gpu_arch_string():
     if len(gpus) == 0:
         raise RuntimeError('No GPU devices found')
     (major, minor) = _get_compute_cap(gpus[0])
-    return 'sm_%s%s' % (major, minor)
+    # return 'sm_%s%s' % (major, minor)
+    # Modified by Duan
+    return 'sm_75'
 
 def _run_cmd(cmd):
     with os.popen(cmd) as pipe:

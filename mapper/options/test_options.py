@@ -12,6 +12,7 @@ class TestOptions:
 		self.parser.add_argument('--exp_dir', type=str, help='Path to experiment output directory')
 		self.parser.add_argument('--checkpoint_path', default=None, type=str, help='Path to model checkpoint')
 		self.parser.add_argument('--couple_outputs', action='store_true', help='Whether to also save inputs + outputs side-by-side')
+		self.parser.add_argument('--mod_intensity', default = 1.0, type = float, help = 'Intensity of modifying w or s')
 
 		self.parser.add_argument('--mapper_type', default='LevelsMapper', type=str, help='Which mapper to use')
 		self.parser.add_argument('--no_coarse_mapper', default=False, action="store_true")
@@ -21,7 +22,7 @@ class TestOptions:
 
 
 		self.parser.add_argument('--test_batch_size', default=2, type=int, help='Batch size for testing and inference')
-		self.parser.add_argument('--latents_test_path', default=None, type=str, help="The latents for the validation")
+		self.parser.add_argument('--latents_test_path', default="../pretrained_models/test_faces.pt", type=str, help="The latents for the validation")
 		self.parser.add_argument('--test_workers', default=2, type=int, help='Number of test/inference dataloader workers')
 		self.parser.add_argument('--work_in_stylespace', default=False, action='store_true')
 

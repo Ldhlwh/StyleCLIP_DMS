@@ -10,10 +10,10 @@ import time
 
 from tqdm import tqdm
 
-from mapper.training.train_utils import convert_s_tensor_to_list
-
 sys.path.append(".")
 sys.path.append("..")
+
+from mapper.training.train_utils import convert_s_tensor_to_list
 
 from mapper.datasets.latents_dataset import LatentsDataset, StyleSpaceLatentsDataset
 
@@ -22,7 +22,7 @@ from mapper.styleclip_mapper import StyleCLIPMapper
 
 
 def run(test_opts):
-	out_path_results = os.path.join(test_opts.exp_dir, 'inference_results')
+	out_path_results = os.path.join(test_opts.exp_dir, f'inference_results_{test_opts.mod_intensity}')
 	os.makedirs(out_path_results, exist_ok=True)
 
 	# update test options with options used during training
@@ -63,7 +63,7 @@ def run(test_opts):
 				input_cuda = input_cuda.cuda()
 
 			tic = time.time()
-			result_batch = run_on_batch(input_cuda, net, opts.couple_outputs, opts.work_in_stylespace)
+			result_batch = run_on_batch(input_cuda, net, opts.mod_intensity, opts.couple_outputs, opts.work_in_stylespace)
 			toc = time.time()
 			global_time.append(toc - tic)
 
@@ -86,16 +86,16 @@ def run(test_opts):
 		f.write(result_str)
 
 
-def run_on_batch(inputs, net, couple_outputs=False, stylespace=False):
+def run_on_batch(inputs, net, mod_intensity, couple_outputs=False, stylespace=False):
 	w = inputs
 	with torch.no_grad():
 		if stylespace:
 			delta = net.mapper(w)
-			w_hat = [c + 0.1 * delta_c for (c, delta_c) in zip(w, delta)]
+			w_hat = [c + 0.1 * delta_c * mod_intensity for (c, delta_c) in zip(w, delta)]
 			x_hat, _, w_hat = net.decoder([w_hat], input_is_latent=True, return_latents=True,
 			                                   randomize_noise=False, truncation=1, input_is_stylespace=True)
 		else:
-			w_hat = w + 0.1 * net.mapper(w)
+			w_hat = w + 0.1 * net.mapper(w) * mod_intensity
 			x_hat, w_hat, _ = net.decoder([w_hat], input_is_latent=True, return_latents=True,
 			                                   randomize_noise=False, truncation=1)
 		result_batch = (x_hat, w_hat)

@@ -13,8 +13,8 @@ class TrainOptions:
 		self.parser.add_argument('--no_coarse_mapper', default=False, action="store_true")
 		self.parser.add_argument('--no_medium_mapper', default=False, action="store_true")
 		self.parser.add_argument('--no_fine_mapper', default=False, action="store_true")
-		self.parser.add_argument('--latents_train_path', default="train_faces.pt", type=str, help="The latents for the training")
-		self.parser.add_argument('--latents_test_path', default="test_faces.pt", type=str, help="The latents for the validation")
+		self.parser.add_argument('--latents_train_path', default="../pretrained_models/train_faces.pt", type=str, help="The latents for the training")
+		self.parser.add_argument('--latents_test_path', default="../pretrained_models/test_faces.pt", type=str, help="The latents for the validation")
 		self.parser.add_argument('--train_dataset_size', default=5000, type=int, help="Will be used only if no latents are given")
 		self.parser.add_argument('--test_dataset_size', default=1000, type=int, help="Will be used only if no latents are given")
 		self.parser.add_argument('--work_in_stylespace', default=False, action='store_true', help="trains a mapper in S instead of W+")
@@ -43,6 +43,7 @@ class TrainOptions:
 		self.parser.add_argument('--save_interval', default=2000, type=int, help='Model checkpoint interval')
 
 		self.parser.add_argument('--description', required=True, type=str, help='Driving text prompt')
+		self.parser.add_argument('--description2', default=None, type=str, help='Another driving text prompt')
 
 
 	def parse(self):

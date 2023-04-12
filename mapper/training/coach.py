@@ -53,6 +53,8 @@ class Coach:
 										  drop_last=True)
 
 		self.text_inputs = torch.cat([clip.tokenize(self.opts.description)]).cuda()
+		if self.opts.description2:
+			self.text_inputs2 = torch.cat([clip.tokenize(self.opts.description2)]).cuda()
 
 		# Initialize logger
 		log_dir = os.path.join(opts.exp_dir, 'logs')
@@ -230,6 +232,8 @@ class Coach:
 			loss = loss_id * self.opts.id_lambda
 		if self.opts.clip_lambda > 0:
 			loss_clip = self.clip_loss(x_hat, self.text_inputs).mean()
+			if self.opts.description2:
+				loss_clip = loss_clip + self.clip_loss(x_hat, self.text_inputs2).mean()
 			loss_dict['loss_clip'] = float(loss_clip)
 			loss += loss_clip * self.opts.clip_lambda
 		if self.opts.latent_l2_lambda > 0:

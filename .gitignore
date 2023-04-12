@@ -1,4 +1,8 @@
 /.idea/
 /latents/
-/results/
+results/
 /mine/
+__pycache__/
+/pretrained_models/
+/global_directions/model
+/mapper/results
